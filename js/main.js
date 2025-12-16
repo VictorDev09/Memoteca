@@ -1,22 +1,24 @@
 import ui from "./ui.js";
+import api from "./api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   ui.renderizarPensamentos();
 
   const formularioPensamento = document.getElementById("pensamento-form");
 
-  formularioPensamento.addEventListener("submit", async (evento) => {
-    evento.preventDefault(); // Evita que a página recarregue sozinha
-
-    const conteudo = document.getElementById("pensamento-conteudo").value;
-    const autoria = document.getElementById("pensamento-autoria").value;
-
-    try {
-      await api.salvarPensamento({ conteudo, autoria });
-
-      window.location.reload();
-    } catch {
-      alert("Erro ao salvar o pensamento");
-    }
-  });
+  formularioPensamento.addEventListener("submit", manipularsubmissaoFormulario);
 });
+
+async function manipularsubmissaoFormulario(event) {
+  event.preventDefault();
+  const id = document.getElementById("pensamento-id").value;
+  const conteudo = document.getElementById("pensamento-conteudo").value;
+  const autoria = document.getElementById("pensamento-autoria").value;
+
+  try {
+    await api.salvarPensamentos({ conteudo, autoria });
+    ui.renderizarPensamentos();
+  } catch {
+    alert("Erro ao salvar pensamento");
+  }
+}
